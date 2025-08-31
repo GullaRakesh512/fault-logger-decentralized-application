@@ -1,166 +1,130 @@
-Blockchain-Based Fault Detection and Logging for Power Systems
-This project introduces a decentralized system for detecting and logging faults in electrical power systems using blockchain technology. It replaces traditional, vulnerable centralized logging systems with an immutable, transparent, and automated solution built on Ethereum smart contracts.
+⚡ Blockchain-Based Fault Detection and Logging for Power Systems
+
+This project introduces a decentralized system for detecting and logging faults in electrical power systems using blockchain technology.
+It replaces traditional, vulnerable centralized logging systems with an immutable, transparent, and automated solution built on Ethereum smart contracts.
 
 📜 About The Project
-Traditional fault recording mechanisms in power systems often face challenges like 
 
-data tampering, single points of failure, and a lack of transparency. This project addresses these issues by leveraging a blockchain to create a secure and auditable ledger of electrical faults.
+Traditional fault recording mechanisms in power systems face challenges like:
 
+Data tampering
 
-The system uses a Solidity smart contract to record critical events like overcurrents and short circuits. A 
+Single points of failure
 
-Python interface acts as a bridge, connecting the power grid's monitoring infrastructure to the blockchain, allowing for seamless data submission and retrieval.
+Lack of transparency
 
+This project solves these issues by leveraging blockchain technology to create a secure and auditable ledger of electrical faults.
+
+The system uses a Solidity smart contract to record critical events (overcurrents, short circuits, etc.).
+A Python interface connects the monitoring infrastructure to the blockchain, enabling seamless fault logging and retrieval.
 
 ✨ Key Features
 
-🔒 Tamper-Proof Data Storage: Fault records are stored immutably on the blockchain, secured by cryptographic hashes, making them impossible to alter or delete.
+🔒 Tamper-Proof Data Storage – Faults are stored immutably on Ethereum blockchain.
 
+🌐 Decentralized Verification – No central database → eliminates single points of failure.
 
+🤖 Programmable Automation – Smart contract enforces fault detection rules (e.g., >100A).
 
-🌐 Decentralized Verification: By removing the central database, the system eliminates single points of failure and control, ensuring high availability and trust.
-
-
-
-🤖 Programmable Automation: The smart contract automatically enforces rules, such as checking current values against a configurable threshold (e.g., 100A) to identify faults.
-
-
-
-🔍 Full Auditability: Every fault logged is tied to a reporter's address and a precise timestamp, creating a transparent and verifiable audit trail for diagnostics and regulatory compliance.
-
+🔍 Full Auditability – Transparent fault history with timestamps & reporter addresses.
 
 🛠️ Technology Stack
-This project is built using the following technologies:
 
+Blockchain: Ethereum
 
-Blockchain: Ethereum 
+Smart Contracts: Solidity
 
+Development & Testing: Hardhat
 
-Smart Contract Language: Solidity 
+Backend & Integration: Python
 
-
-Development & Testing: Hardhat 
-
-
-Backend & Integration: Python 
-
-
-Ethereum-Python Interface: Web3.py 
+Ethereum-Python Interface: Web3.py
 
 🏗️ System Architecture
-The system operates in a simple, three-step flow:
 
+Fault Detection → Sensor detects anomaly (e.g., 150A current) and sends data to Python app.
 
-Fault Detection: A sensor or monitoring device in the power system detects an anomaly (e.g., a current of 150A) and sends the data (Bus ID, fault type, current, timestamp) to the Python application.
+Python Interface → Checks threshold, formats data, and submits to smart contract.
 
-Python Interface: The Python script receives the data. It checks if the current exceeds the predefined threshold. If it does, the script formats the data, signs a transaction, and submits it to the 
-
-addFault() function in the smart contract .
-
-Smart Contract & Blockchain: The smart contract validates the transaction and permanently records the fault data on the Ethereum blockchain. It then emits an event (
-
-FaultLogged) to confirm the successful recording, creating an immutable record with a unique transaction hash .
-
+Smart Contract → Validates & records fault on blockchain. Emits FaultLogged event with transaction hash.
 
 🚀 Getting Started
-Follow these instructions to get a local copy up and running for development and testing.
+🔧 Prerequisites
 
-Prerequisites
-Make sure you have the following installed on your system:
+Install the following before setup:
 
-Node.js & npm: Download Node.js
+Node.js & npm
 
-Python 3.8+: Download Python
+Python 3.8+
 
-Git: Download Git
+Git
 
-Installation & Setup
-Clone the repository:
-
-Bash
-
+📦 Installation & Setup
+1. Clone the repository
 git clone https://github.com/your-username/fault-logger-dapp.git
 cd fault-logger-dapp
-Set up the Smart Contract (Hardhat):
 
-Install the required npm packages.
-
-Bash
-
+2. Setup Smart Contract (Hardhat)
 npm install
-Compile the smart contract.
-
-Bash
-
 npx hardhat compile
-In a new terminal, start a local Hardhat blockchain node.
 
-Bash
+
+Start a local Ethereum node:
 
 npx hardhat node
-This will start a local Ethereum node and provide you with several test accounts and their private keys.
 
-Deploy the smart contract to the local node.
 
-Bash
+Deploy the contract:
 
 npx hardhat run scripts/deploy.js --network localhost
-After deployment, copy the deployed contract address printed in the terminal.
 
-Set up the Python Interface:
-
-Navigate to the Python script directory and create a virtual environment.
-
-Bash
-
+3. Setup Python Interface
 cd python_interface
 python -m venv venv
-source venv/bin/activate  # On Windows, use `venv\Scripts\activate`
-Install the required Python packages.
-
-Bash
-
+source venv/bin/activate   # Windows: venv\Scripts\activate
 pip install -r requirements.txt
-Open the Python script (e.g., log_fault.py) and update it with your local node URL (http://127.0.0.1:8545/), the deployed contract address, and the private key of one of the test accounts from the Hardhat node.
+
+
+Update your Python script (log_fault.py) with:
+
+Local node URL → http://127.0.0.1:8545/
+
+Contract address from deployment
+
+Private key of one test account
 
 💻 Usage
-Once the setup is complete, you can interact with the system.
-
-Log a New Fault:
-Run the Python script to simulate a fault detection and log it on the blockchain.
-
-Bash
-
+Log a New Fault
 python log_fault.py
-You should see an output confirming the transaction was sent and a transaction hash once it's mined.
 
-Retrieve Fault History:
-Run another script to query the smart contract and fetch the list of all recorded faults.
 
-Bash
+Example output:
 
+Logging fault data: Bus1, Overload, Current: 150A
+Transaction sent. Hash: 0xe246f1d0241c...
+Fault logged successfully!
+
+Retrieve Fault History
 python get_faults.py
-The output will display the total number of faults and the details of each recorded fault.
 
-Example Output:
 
-Logging fault data: Bus: Bus1, Fault Type: Overload, Current: 150, Timestamp: 2025-04-18T06:46:29.445Z
-Sending transaction...
-Transaction sent. Hash: 0xe246f1d0241ca351c5ada55cf83144d912d9e080f744867f76c3f00473182d4
-Fault logged successfully at 2025-04-18T06:46:29.445Z
+Example output:
 
-Total faults recorded: 1
-Fault 0 => Bus: Bus1, Type: Overload, Current: 150 A, Time: 2025-04-18T06:46:29.445Z
+Total faults: 1
+Fault 0 => Bus: Bus1, Type: Overload, Current: 150 A, Time: 2025-04-18T06:46:29Z
+
 🔭 Future Enhancements
-This project serves as a strong foundation that can be extended with several advanced features:
 
+🤖 IoT & AI Integration → Automatic fault detection + predictive analytics
 
-🤖 IoT & AI Integration: Automate data collection by integrating with IoT grid sensors and use machine learning algorithms to predict faults based on historical data.
+⚡ Layer-2 Scalability → Optimism/Arbitrum for lower cost & faster logging
 
-** scalability solutions**: Adopt Layer-2 solutions (like Optimism or Arbitrum) to reduce transaction costs and latency for high-frequency logging.
+📦 Decentralized Storage → IPFS for large waveform datasets
 
+📊 Dashboarding → Real-time fault monitoring & analytics
 
-📦 Decentralized Storage: Use IPFS for storing large datasets, like electrical waveform captures, while keeping the verifiable hash on-chain.
+📚 References
 
+IEEE research papers on blockchain-based power system monitoring
 
-📊 Advanced Dashboarding: Develop real-time visualization dashboards for operators to monitor grid health and analyze fault trends.
+Documentation for Ethereum, Hardhat, and Web3.py
